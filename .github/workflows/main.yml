@@ -1,0 +1,33 @@
+name: github-action
+on:
+  schedule:
+    - cron:  '* 5 * * *'
+  workflow_dispatch:
+jobs:
+  build:
+    name: parse
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python 3.8
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.8
+    - name: Run main script
+      run: |
+        python main.py
+    - name: Commit files
+      run: |
+        git add -N .
+        if ! git diff --exit-code --quiet
+        then
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Actions"
+          git pull
+          git add .
+          git diff
+          git commit -m "Update ${{ github.sha }} from Github Actions"
+          git push origin main
+          echo $(TZ=Asia/Tokyo date '+%Y-%m-%d %H:%M:%S(%z)')
+        fi
