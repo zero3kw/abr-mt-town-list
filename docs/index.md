@@ -1,3 +1,5 @@
+# 各都道府県 町字マスター データ リスト
+
 | 都道府県 | Link |
 | --- | --- |
 | 北海道 | [./data/mt_town_pref01](./data/mt_town_pref01) |
@@ -47,3 +49,5 @@
 | 宮崎県 | [./data/mt_town_pref45](./data/mt_town_pref45) |
 | 鹿児島県 | [./data/mt_town_pref46](./data/mt_town_pref46) |
 | 沖縄県 | [./data/mt_town_pref47](./data/mt_town_pref47) |
+
+- 出典：「アドレス・ベース・レジストリ（町字マスター データセット）」（デジタル庁）（https://gov-csv-export-public.s3.ap-northeast-1.amazonaws.com/mt_town_meta/pref/mt_town_pref[01-47].metadata.csv）を加工して作成
