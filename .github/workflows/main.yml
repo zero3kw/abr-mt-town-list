@@ -1,4 +1,4 @@
-name: github-action
+name: Check for data updates daily
 on:
   schedule:
     - cron:  '15 5 * * *'
