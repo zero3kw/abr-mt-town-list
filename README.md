@@ -9,7 +9,7 @@
 
 [![Check for data updates daily](https://github.com/zero3kw/abr-mt-town-list/actions/workflows/main.yml/badge.svg)](https://github.com/zero3kw/abr-mt-town-list/actions/workflows/main.yml)
 
-- 出典
+- 参考
   - [アドレス・ベース・レジストリ｜デジタル庁(https://www.digital.go.jp/policies/base_registry_address/)](https://www.digital.go.jp/policies/base_registry_address/)
 
 
