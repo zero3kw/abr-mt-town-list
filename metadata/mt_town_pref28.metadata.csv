@@ -5,11 +5,11 @@ URI,Value
 04 dct:description,アドレス（住所・所在地）・ベース・レジストリの町字マスターデータセットです。
 05 dct:format,text/csv
 06 dct:issued,2022-02-28T00:00
-07 dct:modified,2022-03-24T09:29
+07 dct:modified,2022-07-25T10:37
 08 dcat:landingPage,https://www.digital.go.jp/policies/posts/base_registry
 09 dct:temporal,
 10 dcat:accessURL,https://gov-csv-export-public.s3.ap-northeast-1.amazonaws.com/mt_town/pref/mt_town_pref28.csv.zip
-11 dcat:byteSize,6400941
+11 dcat:byteSize,6400931
 12 dcat:keyword,"アドレス,住所,所在地,ベース・レジストリ,町字マスターデータ,町名一覧,大字・町丁目"
 13 dct:language,jpn
 14 dct:rights,https://www.digital.go.jp/policies/posts/base_registry
