@@ -14,9 +14,14 @@ jobs:
       uses: actions/setup-python@v1
       with:
         python-version: 3.8
+    - name: Install dependencies
+      run: pip install -r requirements.txt
     - name: Run main script
       run: |
         python main.py
+    - name: Run make_index script
+      run: |
+        python make_index.py
     - name: Commit files
       run: |
         git add -N .
