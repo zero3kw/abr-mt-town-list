@@ -17,6 +17,7 @@ for filepath in files:
   md_string = '- [' + title.replace('# ', '') + '](' + filepath.replace('./docs/','./') + ')\n'
   target_file.write(md_string)
 
+target_file.write('\n---\n')
 target_file.write('\n- 出典：[「アドレス・ベース・レジストリ（町字マスター データセット）」（デジタル庁）](https://www.digital.go.jp/policies/base_registry_address/) を加工して作成')
 
 target_file.close()

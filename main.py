@@ -83,8 +83,10 @@ def groupby_lgcode_file(csv_filename):
         title_df = pd.DataFrame([title, ' '])
         title_df.to_csv(f'{DATA_DIR}{lg_code[0:2]}/{lg_code}.md', index=False, header=False, quoting=3, encoding='utf-8')
 
+        group_df.sort_values('ヨミガナ', ascending=True, inplace=True)
+
         group_df.drop(columns=['都道府県名', '郡名', '市区町村名', '政令市区名', '全国地方公共団体コード'])\
-                .to_markdown(f'{DATA_DIR}{lg_code[0:2]}/{lg_code}.md', index=False, mode='a')
+            .to_markdown(f'{DATA_DIR}{lg_code[0:2]}/{lg_code}.md', index=False, mode='a')
 
 def init():
     os.makedirs(TMP_DIR, exist_ok=True)
