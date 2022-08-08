@@ -1,0 +1,19 @@
+URI,Value
+01 dct:identifier,o1-230006_g2-000003
+02 dct:title,愛知県 町字マスター データセット
+03 dct:publisher,デジタル庁
+04 dct:description,アドレス（住所・所在地）・ベース・レジストリの町字マスターデータセットです。
+05 dct:format,text/csv
+06 dct:issued,2022-02-28T00:00
+07 dct:modified,2022-03-24T09:24
+08 dcat:landingPage,https://www.digital.go.jp/policies/posts/base_registry
+09 dct:temporal,
+10 dcat:accessURL,https://gov-csv-export-public.s3.ap-northeast-1.amazonaws.com/mt_town/pref/mt_town_pref23.csv.zip
+11 dcat:byteSize,13516939
+12 dcat:keyword,"アドレス,住所,所在地,ベース・レジストリ,町字マスターデータ,町名一覧,大字・町丁目"
+13 dct:language,jpn
+14 dct:rights,https://www.digital.go.jp/policies/posts/base_registry
+15 dct:license,CC BY
+16 dcat:contactPoint,base-registries-address@digital.go.jp
+17 dct:spatial,愛知県
+18 dcat:distribution,https://gov-csv-export-public.s3.ap-northeast-1.amazonaws.com/mt_town_meta/pref/mt_town_pref23.metadata.csv
