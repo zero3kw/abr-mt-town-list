@@ -5,9 +5,13 @@ import glob
 
 import pref
 
-target_file = open('./docs/index.md', mode='w', encoding="UTF-8")
-target_file.write('# 町字リスト一覧ポータル \n\n')
-target_file.write('## 都道府県\n')
+meta='''---
+layout: top
+title:
+description: アドレス・ベース・レジストリ(ABR)の町字リストの一覧ウェブページ
+---
+
+'''
 
 pref_table='''
 |[北海道](#北海道)|[青森県](#青森県)|[岩手県](#岩手県)|[宮城県](#宮城県)|[秋田県](#秋田県)|[山形県](#山形県)|[福島県](#福島県)|
@@ -19,8 +23,12 @@ pref_table='''
 |[熊本県](#熊本県)|[大分県](#大分県)|[宮崎県](#宮崎県)|[鹿児島県](#鹿児島県)|[沖縄県](#沖縄県)| | |
 '''
 
-target_file.write(pref_table)
 
+target_file = open('./docs/index.md', mode='w', encoding="UTF-8")
+target_file.write(meta)
+target_file.write('# 町字リスト一覧ポータル \n\n')
+target_file.write('## 都道府県\n')
+target_file.write(pref_table)
 target_file.write('\n---\n')
 target_file.write('\n## 市区町村 \n')
 
