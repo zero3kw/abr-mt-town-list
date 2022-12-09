@@ -1,7 +1,7 @@
 ---
 layout: top
 title:
-description: 日本の町字リストの一覧ウェブページ
+description: アドレス・ベース・レジストリ(ABR)の町字リストの一覧ウェブページ
 ---
 
 # 町字リスト一覧ポータル 
@@ -2063,3 +2063,4 @@ description: 日本の町字リストの一覧ウェブページ
 
 ---
 
+- 出典：[「アドレス・ベース・レジストリ（町字マスター データセット）」（デジタル庁）](https://www.digital.go.jp/policies/base_registry_address/) を加工して作成
