@@ -29,7 +29,7 @@ jobs:
         run: python3 scripts/build_pages.py
 
       - name: Build index
-        run: python3 scripts/build_index_md.py
+        run: python3 scripts/build_index.py
 
       - name: Checkout gh-pages branch
         uses: actions/checkout@v4
@@ -39,8 +39,14 @@ jobs:
           fetch-depth: 0
 
       - name: Sync docs to gh-pages
+        working-directory: gh-pages
         run: |
-          rsync -av --delete docs/ gh-pages/
+          # index.md と data/ 以下だけを同期
+          rsync -av --delete \
+            --include 'index.md' \
+            --include 'data/***' \
+            --exclude '*' \
+            ../docs/ .
 
       - name: Commit and push to gh-pages
         working-directory: gh-pages
