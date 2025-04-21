@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  update:
+  update-csv-files:
     runs-on: ubuntu-latest
 
     steps:
