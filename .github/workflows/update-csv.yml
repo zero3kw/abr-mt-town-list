@@ -1,10 +1,8 @@
 name: Update CSV Files
 
 on:
-  # 毎日 12:00 JST（3:00 UTC）
   schedule:
     - cron: '0 3 * * *'
-  # 手動トリガー
   workflow_dispatch:
 
 jobs:
