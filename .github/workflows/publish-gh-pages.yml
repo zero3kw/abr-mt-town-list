@@ -78,33 +78,39 @@ jobs:
           path: gh-pages
           fetch-depth: 0
 
-      - name: docsをgh-pagesに同期
+      - name: docsをgh-pagesに同期（既存ファイルを保持）
         run: |
-          # gh-pagesにdataディレクトリがなければ作成
-          mkdir -p gh-pages/data
+          # 現在のディレクトリ構造を確認
+          echo "現在のディレクトリ構造:"
+          pwd
+          ls -la
 
-          # index.mdをコピー
+          # index.mdのみをコピー
           if [ -f "docs/index.md" ]; then
-            cp docs/index.md gh-pages/
+            echo "docs/index.mdをgh-pagesにコピーします"
+            cp -f docs/index.md gh-pages/
           else
             echo "警告: docs/index.mdが存在しないため、コピーをスキップします"
           fi
 
-          # dataディレクトリの内容をコピー
+          # dataディレクトリがなければ作成
+          mkdir -p gh-pages/data
+
+          # dataディレクトリ内の各ファイルをコピー（既存のファイルを上書き）
           if [ -d "docs/data" ]; then
-            cp -r docs/data/* gh-pages/data/
+            echo "docs/dataディレクトリの内容をgh-pages/dataにコピーします"
+            # 絶対パスを使用
+            cp -rf docs/data/* gh-pages/data/
           else
             echo "警告: docs/dataディレクトリが存在しないため、コピーをスキップします"
           fi
 
-      - name: デバッグ用にgh-pagesのファイルを一覧表示
-        working-directory: gh-pages
-        run: |
-          echo "コミット準備完了のファイル:"
-          ls -la
-          if [ -d "data" ]; then
-            echo "dataディレクトリの内容:"
-            ls -la data/
+          # すべてのファイルが正しくコピーされたか確認
+          echo "コピー後のgh-pagesディレクトリ:"
+          ls -la gh-pages/
+          if [ -d "gh-pages/data" ]; then
+            echo "gh-pages/dataディレクトリの内容:"
+            ls -la gh-pages/data/
           fi
 
       - name: gh-pagesにコミットしてプッシュ
@@ -113,7 +119,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          git add .
+          git add index.md data/
           git status
 
           if git diff --staged --quiet; then
