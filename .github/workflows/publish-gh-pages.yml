@@ -29,7 +29,7 @@ jobs:
         run: python3 scripts/build_pages.py
 
       - name: Build index
-        run: python3 scripts/build_index.py
+        run: python3 scripts/build_index_md.py
 
       - name: Checkout gh-pages branch
         uses: actions/checkout@v4
