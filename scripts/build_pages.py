@@ -39,7 +39,7 @@ for lg, grp in all_df.groupby('lg_code'):
     # YAML front-matter and header
     lines = [
         '---',
-        'layout: default',
+        'layout: list',
         f'title: "{title_text}"',
         '---',
         '',
