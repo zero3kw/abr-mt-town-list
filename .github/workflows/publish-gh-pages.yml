@@ -33,17 +33,11 @@ jobs:
         run: |
           pip install pandas
 
-      # docs下にファイルを生成するように設定
       - name: Build pages
         run: python3 scripts/build_pages.py
 
       - name: Build index
         run: python3 scripts/build_index_md.py
-
-      - name: 生成されたファイルの確認
-        run: |
-          # docsディレクトリが存在しない場合は作成
-          mkdir -p docs/data
 
       - name: デバッグ用に生成されたファイルを一覧表示
         run: |
@@ -62,21 +56,6 @@ jobs:
             echo "警告: index.mdが存在しません"
           fi
 
-      # gh-pagesブランチが存在するか確認し、存在しなければ作成
-      - name: 必要に応じてgh-pagesブランチを作成
-        run: |
-          if ! git ls-remote --heads origin gh-pages | grep gh-pages; then
-            git checkout --orphan gh-pages
-            git rm -rf .
-            echo "# プロジェクトページ" > index.md
-            git add index.md
-            git config user.name "github-actions[bot]"
-            git config user.email "github-actions[bot]@users.noreply.github.com"
-            git commit -m "gh-pagesの初期コミット"
-            git push origin gh-pages
-            git checkout main
-          fi
-
       - name: gh-pagesブランチをチェックアウト
         uses: actions/checkout@v4
         with:
@@ -84,57 +63,22 @@ jobs:
           path: gh-pages
           fetch-depth: 0
 
-      - name: docsをgh-pagesに同期（既存ファイルを保持）
+      - name: docsをgh-pagesに同期
         run: |
-          # 現在のディレクトリ構造を確認
-          echo "現在のディレクトリ構造:"
-          pwd
-          ls -la
-
-          # gh-pages/docsディレクトリがなければ作成
           mkdir -p gh-pages/docs
+          cp -f docs/index.md gh-pages/docs/
 
-          # index.mdを適切な場所にコピー
-          if [ -f "docs/index.md" ]; then
-            echo "docs/index.mdをgh-pages/docsにコピーします"
-            cp -f docs/index.md gh-pages/docs/
-          else
-            echo "警告: docs/index.mdが存在しないため、コピーをスキップします"
-          fi
-
-          # dataディレクトリがなければ作成
           mkdir -p gh-pages/docs/data
+          cp -rf docs/data/* gh-pages/docs/data/
 
-          # dataディレクトリ内の各ファイルをコピー（既存のファイルを上書き）
-          if [ -d "docs/data" ]; then
-            echo "docs/dataディレクトリの内容をgh-pages/docs/dataにコピーします"
-            # 絶対パスを使用
-            cp -rf docs/data/* gh-pages/docs/data/
-          else
-            echo "警告: docs/dataディレクトリが存在しないため、コピーをスキップします"
-          fi
-
-          # すべてのファイルが正しくコピーされたか確認
-          echo "コピー後のgh-pages/docsディレクトリ:"
-          ls -la gh-pages/docs/
-          if [ -d "gh-pages/docs/data" ]; then
-            echo "gh-pages/docs/dataディレクトリの内容:"
-            ls -la gh-pages/docs/data/
-          fi
-
-      - name: gh-pagesにコミットしてプッシュ
-        working-directory: gh-pages
+      - name: Commit and push if changes exist
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-
-          # docs/index.mdとdocs/data/ディレクトリのみを追加
-          git add docs/index.md docs/data/
-          git status
-
-          if git diff --staged --quiet; then
-            echo "デプロイする変更はありません"
-          else
-            git commit -m "$GITHUB_SHAからのサイトデプロイ"
+          if [[ -n $(git status --porcelain) ]]; then
+            git config user.name github-actions[bot]
+            git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+            git add docs/index.md docs/data/
+            git commit -m "update: $(date '+%Y-%m-%d')"
             git push origin gh-pages
+          else
+            echo "No changes to commit."
           fi
