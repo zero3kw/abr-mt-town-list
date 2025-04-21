@@ -1,4 +1,4 @@
-name: update-csv-files
+name: 1. Update CSV Files
 
 on:
   schedule:
