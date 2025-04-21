@@ -39,23 +39,6 @@ jobs:
       - name: Build index
         run: python3 scripts/build_index_md.py
 
-      - name: デバッグ用に生成されたファイルを一覧表示
-        run: |
-          echo "docsディレクトリの内容:"
-          ls -la docs/
-          if [ -d "docs/data" ]; then
-            echo "docs/dataディレクトリの内容:"
-            ls -la docs/data/
-          else
-            echo "警告: docs/dataディレクトリが存在しません"
-          fi
-
-          if [ -f "docs/index.md" ]; then
-            echo "index.mdは存在します"
-          else
-            echo "警告: index.mdが存在しません"
-          fi
-
       - name: gh-pagesブランチをチェックアウト
         uses: actions/checkout@v4
         with:
@@ -73,10 +56,11 @@ jobs:
 
       - name: Commit and push if changes exist
         run: |
+          cd gh-pages
           if [[ -n $(git status --porcelain) ]]; then
-            git config user.name github-actions[bot]
-            git config user.email 41898282+github-actions[bot]@users.noreply.github.com
-            git add docs/index.md docs/data/
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add .
             git commit -m "update: $(date '+%Y-%m-%d')"
             git push origin gh-pages
           else
