@@ -1,12 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-scripts/build_pages.py
 
-Python version of build_pages: loads all CSV files from the data directory,
-then directly generates Markdown pages under docs/data/<pref_prefix>/<lg_code>.md
-without writing any intermediate CSV files.
-"""
 import os
 import glob
 import pandas as pd
