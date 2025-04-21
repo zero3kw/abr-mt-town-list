@@ -28,7 +28,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.11'
+          python-version: '3.12'
 
       - name: Install Python dependencies
         run: |
@@ -47,22 +47,14 @@ jobs:
           path: gh-pages
           fetch-depth: 0
 
-      - name: Dry‐run rsync
-        working-directory: gh-pages
-        run: |
-          rsync -avvn --delete \
-            --include 'index.md' \
-            --include 'data/***' \
-            --exclude '*' \
-            ../docs/ .
-
       - name: Sync docs to gh-pages
         working-directory: gh-pages
         run: |
           # index.md と data/ 以下だけを同期
           rsync -av --delete \
             --include 'index.md' \
-            --include 'data/***' \
+            --include 'data/' \
+            --include 'data/**' \
             --exclude '*' \
             ../docs/ .
 
