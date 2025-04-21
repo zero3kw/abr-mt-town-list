@@ -47,6 +47,15 @@ jobs:
           path: gh-pages
           fetch-depth: 0
 
+      - name: Dry‐run rsync
+        working-directory: gh-pages
+        run: |
+          rsync -avvn --delete \
+            --include 'index.md' \
+            --include 'data/***' \
+            --exclude '*' \
+            ../docs/ .
+
       - name: Sync docs to gh-pages
         working-directory: gh-pages
         run: |
