@@ -1,4 +1,4 @@
-name: Publish to gh-pages
+name: Build and Publish to GitHub Pages
 
 on:
   push:
@@ -39,14 +39,14 @@ jobs:
       - name: Build index
         run: python3 scripts/build_index_md.py
 
-      - name: gh-pagesブランチをチェックアウト
+      - name: Checkout gh-pages branch
         uses: actions/checkout@v4
         with:
           ref: gh-pages
           path: gh-pages
           fetch-depth: 0
 
-      - name: docsをgh-pagesに同期
+      - name: Sync docs to gh-pages
         run: |
           mkdir -p gh-pages/docs
           cp -f docs/index.md gh-pages/docs/
@@ -61,7 +61,7 @@ jobs:
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git add .
-            git commit -m "update: $(date '+%Y-%m-%d')"
+            git commit -m "Updated: $(date '+%Y-%m-%d')"
             git push origin gh-pages
           else
             echo "No changes to commit."
