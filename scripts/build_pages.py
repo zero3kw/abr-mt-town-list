@@ -46,7 +46,7 @@ for lg, grp in all_df.groupby('lg_code'):
     lines = [
         '---',
         'layout: default',
-        f'title: "# {title_text}"',
+        f'title: "{title_text}"',
         '---',
         '',
         f'# {title_text}',

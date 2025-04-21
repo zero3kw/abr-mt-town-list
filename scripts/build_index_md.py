@@ -31,7 +31,7 @@ lines = []
 # Header
 lines.extend([
     '---',
-    'layout: top',
+    'layout: default',
     'title:',
     'description: アドレス・ベース・レジストリ(ABR)の町字リスト一覧ポータル',
     '---',
