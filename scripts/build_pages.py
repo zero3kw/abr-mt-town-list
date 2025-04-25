@@ -54,7 +54,7 @@ for lg, grp in all_df.groupby('lg_code'):
         oaza = row['oaza_cho']
         chome = row['chome']
         koaza = row['koaza']
-        yomigana = f"{row['oaza_cho_kana']}{row['chome_kana']}{row['koaza_kana']}"
+        yomigana = f"{row['oaza_cho_kana']} {row['chome_kana']} {row['koaza_kana']}"
         english = f"{row['oaza_cho_roma']}{row['chome_number']}{row['koaza_roma']}"
         machiaza_id = row['machiaza_id']
         rsdt_addr_flg = row['rsdt_addr_flg']
