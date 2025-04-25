@@ -1,9 +1,6 @@
 name: 2. Build and Publish to GitHub Pages
 
 on:
-  push:
-    branches:
-      - main
   workflow_dispatch:
 
 jobs:
@@ -50,7 +47,6 @@ jobs:
         run: |
           mkdir -p gh-pages/docs
           cp -f docs/index.md gh-pages/docs/
-
           mkdir -p gh-pages/docs/data
           cp -rf docs/data/* gh-pages/docs/data/
 
