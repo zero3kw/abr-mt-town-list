@@ -2,7 +2,7 @@ name: 1. Update CSV Files
 
 on:
   schedule:
-    - cron: '0 0 * * *'  # 毎日0:00（UTC）
+    - cron: '35 * * * *'
   workflow_dispatch:
 
 jobs:
