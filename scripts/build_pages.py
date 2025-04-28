@@ -6,8 +6,8 @@ import glob
 import pandas as pd
 
 # --- Configuration ---
-ORGANIZATION = "your-org"
-REPOSITORY = "your-repo"
+ORGANIZATION = "zero3kw"
+REPOSITORY = "abr-mt-town-list-stg"
 
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SRC_DIR = os.path.join(ROOT_DIR, 'data')
@@ -48,7 +48,7 @@ for lg, grp in all_df.groupby('lg_code'):
         '',
         f'# {title_text}',
         '',
-        '| 大字・町名 | 丁目名 | 小字名 | ヨミガナ | 英字 | 町字ID | 住居表示フラグ | 起番フラグ | Issue |',
+        '| 大字・町名 | 丁目名 | 小字名 | ヨミガナ | 英字 | 町字ID | 住居表示フラグ | 起番フラグ | 誤データ指摘 |',
         '|:---|:---|:---|:---|:---|:---|:---|:---|:---|'
     ]
 
@@ -63,11 +63,28 @@ for lg, grp in all_df.groupby('lg_code'):
         rsdt_addr_flg = row['rsdt_addr_flg']
         wake_num_flg = row['wake_num_flg']
 
-        issue_title = f"Data issue in {pref}{city}{ward} {oaza} {chome} {koaza}"
-        issue_body = f"Please check the data for {pref}{city}{ward} {oaza} {chome} {koaza} (町字ID: {machiaza_id})."
+        issue_title = (
+            f"【データ指摘】{title_text} {oaza} {chome} {koaza} {yomigana} {english} ({machiaza_id})"
+        )
+        issue_body = (
+            "以下の項目について誤りがあればチェックしてください。%0A%0A"
+            "- [ ] 大字・町名%0A"
+            "- [ ] 丁目名%0A"
+            "- [ ] 小字名%0A"
+            "- [ ] ヨミガナ%0A"
+            "- [ ] 英字%0A"
+            "- [ ] 町字ID%0A"
+            "- [ ] 住居表示フラグ%0A"
+            "- [ ] 起番フラグ%0A%0A"
+            "# 指摘時のデータ%0A"
+            f"| 大字・町名 | 丁目名 | 小字名 | ヨミガナ | 英字 | 町字ID | 住居表示フラグ | 起番フラグ |%0A"
+            f"| {oaza} | {chome} | {koaza} | {yomigana} | {english} | {machiaza_id} | {rsdt_addr_flg} | {wake_num_flg} |%0A%0A"
+            "# 具体的な内容%0A"
+             "具体的な内容を記入してください。%0A%0A"
+        )
         labels = f"データ指摘,{pref}{city}{ward}{oaza}{chome}{koaza}"
         issue_link = (
-            f"[Issueを作成](https://github.com/{ORGANIZATION}/{REPOSITORY}/issues/new?"
+            f"[📝](https://github.com/{ORGANIZATION}/{REPOSITORY}/issues/new?"
             f"title={issue_title}"
             f"&body={issue_body}"
             f"&labels={labels})"
