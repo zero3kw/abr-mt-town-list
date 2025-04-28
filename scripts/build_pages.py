@@ -49,7 +49,7 @@ for lg, grp in all_df.groupby('lg_code'):
         '',
         f'# {title_text}',
         '',
-        '| 大字・町名 | 丁目名 | 小字名 | ヨミガナ | 英字 | 町字ID | 住居表示フラグ | 起番フラグ | 誤データ指摘 |',
+        '| 大字・町 | 丁目 | 小字 | ヨミガナ | 英字 | 町字ID | 住居表示フラグ | 起番フラグ | 誤データ指摘 |',
         '|:---|:---|:---|:---|:---|:---|:---|:---|:---|'
     ]
 
@@ -64,22 +64,23 @@ for lg, grp in all_df.groupby('lg_code'):
         rsdt_addr_flg = row['rsdt_addr_flg']
         wake_num_flg = row['wake_num_flg']
 
-        issue_title_raw = f"【データ指摘】{title_text} {oaza} {chome} {koaza} {yomigana} {english} ({machiaza_id})"
+        issue_title_raw = f"{title_text} {oaza}{chome}{koaza}({machiaza_id})"
         issue_body_raw = (
-            "以下の項目について誤りがあればチェックしてください。\n\n"
-            "- [ ] 大字・町名\n"
-            "- [ ] 丁目名\n"
-            "- [ ] 小字名\n"
+            "# 指摘項目\n\n"
+            "- [ ] 大字・町\n"
+            "- [ ] 丁目\n"
+            "- [ ] 小字\n"
             "- [ ] ヨミガナ\n"
             "- [ ] 英字\n"
             "- [ ] 町字ID\n"
             "- [ ] 住居表示フラグ\n"
             "- [ ] 起番フラグ\n\n"
             "# 指摘時のデータ\n"
-            f"| 大字・町名 | 丁目名 | 小字名 | ヨミガナ | 英字 | 町字ID | 住居表示フラグ | 起番フラグ |\n"
+            "| 大字・町名 | 丁目名 | 小字名 | ヨミガナ | 英字 | 町字ID | 住居表示フラグ | 起番フラグ |\n"
+            "|:---|:---|:---|:---|:---|:---|:---|:---|\n"
             f"| {oaza} | {chome} | {koaza} | {yomigana} | {english} | {machiaza_id} | {rsdt_addr_flg} | {wake_num_flg} |\n\n"
             "# 具体的な内容\n"
-            "具体的な内容を記入してください。\n"
+            "（ここに具体的な内容を記入してください。）\n"
         )
         labels_raw = f"データ指摘,{pref}{city}{ward}{oaza}{chome}{koaza}"
 
