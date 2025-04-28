@@ -17,6 +17,39 @@ PAGE_ROOT = os.path.join(ROOT_DIR, 'docs', 'data')  # Output root: docs/data
 # Ensure output root exists
 os.makedirs(PAGE_ROOT, exist_ok=True)
 
+def generate_issue_link(organization, repository, title_text, oaza, chome, koaza, yomigana, english, machiaza_id, rsdt_addr_flg, wake_num_flg, pref, city, ward):
+    issue_title_raw = f"{title_text} {oaza}{chome}{koaza}({machiaza_id})"
+    issue_body_raw = (
+        "# 指摘項目\n\n"
+        "- [ ] 大字・町\n"
+        "- [ ] 丁目\n"
+        "- [ ] 小字\n"
+        "- [ ] ヨミガナ\n"
+        "- [ ] 英字\n"
+        "- [ ] 町字ID\n"
+        "- [ ] 住居表示フラグ\n"
+        "- [ ] 起番フラグ\n\n"
+        "# 指摘時のデータ\n"
+        "| 大字・町名 | 丁目名 | 小字名 | ヨミガナ | 英字 | 町字ID | 住居表示フラグ | 起番フラグ |\n"
+        "|:---|:---|:---|:---|:---|:---|:---|:---|\n"
+        f"| {oaza} | {chome} | {koaza} | {yomigana} | {english} | {machiaza_id} | {rsdt_addr_flg} | {wake_num_flg} |\n\n"
+        "# 具体的な内容\n"
+        "（ここに具体的な内容を記入してください。）\n"
+    )
+    labels_raw = f"データ指摘,{pref}{city}{ward}{oaza}{chome}{koaza}"
+
+    issue_title = urllib.parse.quote(issue_title_raw, safe='')
+    issue_body = urllib.parse.quote(issue_body_raw, safe='')
+    labels = urllib.parse.quote(labels_raw, safe='')
+
+    issue_link = (
+        f"[📝](https://github.com/{organization}/{repository}/issues/new?"
+        f"title={issue_title}"
+        f"&body={issue_body}"
+        f"&labels={labels})"
+    )
+    return issue_link
+
 # Load and concatenate all CSV files
 df_list = []
 for csv_path in glob.glob(os.path.join(SRC_DIR, 'mt_town_pref*.csv')):
@@ -38,7 +71,7 @@ for lg, grp in all_df.groupby('lg_code'):
     pref = grp['pref'].iloc[0]
     city = grp['city'].iloc[0]
     ward = grp['ward'].iloc[0] if 'ward' in grp.columns else ''
-    title_text = f"{pref}{city}{ward} ({lg})"
+    title_text = f"{pref}{city}{ward}（{lg}）"
 
     # YAML front-matter and header
     lines = [
@@ -64,35 +97,11 @@ for lg, grp in all_df.groupby('lg_code'):
         rsdt_addr_flg = row['rsdt_addr_flg']
         wake_num_flg = row['wake_num_flg']
 
-        issue_title_raw = f"{title_text} {oaza}{chome}{koaza}({machiaza_id})"
-        issue_body_raw = (
-            "# 指摘項目\n\n"
-            "- [ ] 大字・町\n"
-            "- [ ] 丁目\n"
-            "- [ ] 小字\n"
-            "- [ ] ヨミガナ\n"
-            "- [ ] 英字\n"
-            "- [ ] 町字ID\n"
-            "- [ ] 住居表示フラグ\n"
-            "- [ ] 起番フラグ\n\n"
-            "# 指摘時のデータ\n"
-            "| 大字・町名 | 丁目名 | 小字名 | ヨミガナ | 英字 | 町字ID | 住居表示フラグ | 起番フラグ |\n"
-            "|:---|:---|:---|:---|:---|:---|:---|:---|\n"
-            f"| {oaza} | {chome} | {koaza} | {yomigana} | {english} | {machiaza_id} | {rsdt_addr_flg} | {wake_num_flg} |\n\n"
-            "# 具体的な内容\n"
-            "（ここに具体的な内容を記入してください。）\n"
-        )
-        labels_raw = f"データ指摘,{pref}{city}{ward}{oaza}{chome}{koaza}"
-
-        issue_title = urllib.parse.quote(issue_title_raw, safe='')
-        issue_body = urllib.parse.quote(issue_body_raw, safe='')
-        labels = urllib.parse.quote(labels_raw, safe='')
-
-        issue_link = (
-            f"[📝](https://github.com/{ORGANIZATION}/{REPOSITORY}/issues/new?"
-            f"title={issue_title}"
-            f"&body={issue_body}"
-            f"&labels={labels})"
+        issue_link = generate_issue_link(
+            ORGANIZATION, REPOSITORY, title_text,
+            oaza, chome, koaza, yomigana, english,
+            machiaza_id, rsdt_addr_flg, wake_num_flg,
+            pref, city, ward
         )
 
         line = '| ' + ' | '.join([
