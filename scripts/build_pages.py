@@ -6,6 +6,9 @@ import glob
 import pandas as pd
 
 # --- Configuration ---
+ORGANIZATION = "your-org"
+REPOSITORY = "your-repo"
+
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SRC_DIR = os.path.join(ROOT_DIR, 'data')
 PAGE_ROOT = os.path.join(ROOT_DIR, 'docs', 'data')  # Output root: docs/data
@@ -45,8 +48,8 @@ for lg, grp in all_df.groupby('lg_code'):
         '',
         f'# {title_text}',
         '',
-        '| 大字・町名 | 丁目名 | 小字名 | ヨミガナ | 英字 | 町字ID | 住居表示フラグ | 起番フラグ |',
-        '|:---|:---|:---|:---|:---|:---|:---|:---|'
+        '| 大字・町名 | 丁目名 | 小字名 | ヨミガナ | 英字 | 町字ID | 住居表示フラグ | 起番フラグ | Issue |',
+        '|:---|:---|:---|:---|:---|:---|:---|:---|:---|'
     ]
 
     # Add table rows
@@ -60,9 +63,19 @@ for lg, grp in all_df.groupby('lg_code'):
         rsdt_addr_flg = row['rsdt_addr_flg']
         wake_num_flg = row['wake_num_flg']
 
+        issue_title = f"Data issue in {pref}{city}{ward} {oaza} {chome} {koaza}"
+        issue_body = f"Please check the data for {pref}{city}{ward} {oaza} {chome} {koaza} (町字ID: {machiaza_id})."
+        labels = f"データ指摘,{pref}{city}{ward}{oaza}{chome}{koaza}"
+        issue_link = (
+            f"[Issueを作成](https://github.com/{ORGANIZATION}/{REPOSITORY}/issues/new?"
+            f"title={issue_title}"
+            f"&body={issue_body}"
+            f"&labels={labels})"
+        )
+
         line = '| ' + ' | '.join([
             oaza, chome, koaza, yomigana, english,
-            machiaza_id, rsdt_addr_flg, wake_num_flg
+            machiaza_id, rsdt_addr_flg, wake_num_flg, issue_link
         ]) + ' |'
         lines.append(line)
 
