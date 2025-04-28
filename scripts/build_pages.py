@@ -9,6 +9,7 @@ import urllib.parse
 # --- Configuration ---
 ORGANIZATION = "zero3kw"
 REPOSITORY = "abr-mt-town-list-stg"
+ENABLE_DATA_ISSUE_LINK = True
 
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SRC_DIR = os.path.join(ROOT_DIR, 'data')
@@ -39,6 +40,13 @@ for lg, grp in all_df.groupby('lg_code'):
     ward = grp['ward'].iloc[0] if 'ward' in grp.columns else ''
     title_text = f"{pref}{city}{ward}（{lg}）"
 
+    header_line = '| 大字・町 | 丁目 | 小字 | ヨミガナ | 英字 | 町字ID | 住居表示フラグ | 起番フラグ |'
+    header_sep_line = '|:---|:---|:---|:---|:---|:---|:---|:---|'
+
+    if ENABLE_DATA_ISSUE_LINK:
+        header_line += ' データ指摘 |'
+        header_sep_line += ':---|'
+
     lines = [
         '---',
         'layout: list',
@@ -47,8 +55,8 @@ for lg, grp in all_df.groupby('lg_code'):
         '',
         f'# {title_text}',
         '',
-        '| 大字・町 | 丁目 | 小字 | ヨミガナ | 英字 | 町字ID | 住居表示フラグ | 起番フラグ | データ指摘 |',
-        '|:---|:---|:---|:---|:---|:---|:---|:---|:---|'
+        header_line,
+        header_sep_line
     ]
 
     # --- Prepare table content and issue links ---
@@ -62,44 +70,51 @@ for lg, grp in all_df.groupby('lg_code'):
         rsdt_addr_flg = row['rsdt_addr_flg']
         wake_num_flg = row['wake_num_flg']
 
-        # Construct issue title and body for GitHub issue creation link
-        issue_title_raw = f"{title_text}{oaza}{chome}{koaza}({machiaza_id})"
-        issue_body_raw = (
-            "# 指摘項目\n\n"
-            "- [ ] 大字・町\n"
-            "- [ ] 丁目\n"
-            "- [ ] 小字\n"
-            "- [ ] ヨミガナ\n"
-            "- [ ] 英字\n"
-            "- [ ] 町字ID\n"
-            "- [ ] 住居表示フラグ\n"
-            "- [ ] 起番フラグ\n\n"
-            "# 指摘時のデータ\n"
-            "| 大字・町名 | 丁目名 | 小字名 | ヨミガナ | 英字 | 町字ID | 住居表示フラグ | 起番フラグ |\n"
-            "|:---|:---|:---|:---|:---|:---|:---|:---|\n"
-            f"| {oaza} | {chome} | {koaza} | {yomigana} | {english} | {machiaza_id} | {rsdt_addr_flg} | {wake_num_flg} |\n\n"
-            "# 具体的な内容\n"
-            "（ここに具体的な内容を記入してください。）\n"
-        )
-        labels_raw = f"データ指摘"
+        if ENABLE_DATA_ISSUE_LINK:
+            # Construct issue title and body for GitHub issue creation link
+            issue_title_raw = f"{title_text}{oaza}{chome}{koaza}({machiaza_id})"
+            issue_body_raw = (
+                "# 指摘項目\n\n"
+                "- [ ] 大字・町\n"
+                "- [ ] 丁目\n"
+                "- [ ] 小字\n"
+                "- [ ] ヨミガナ\n"
+                "- [ ] 英字\n"
+                "- [ ] 町字ID\n"
+                "- [ ] 住居表示フラグ\n"
+                "- [ ] 起番フラグ\n\n"
+                "# 指摘時のデータ\n"
+                "| 大字・町名 | 丁目名 | 小字名 | ヨミガナ | 英字 | 町字ID | 住居表示フラグ | 起番フラグ |\n"
+                "|:---|:---|:---|:---|:---|:---|:---|:---|\n"
+                f"| {oaza} | {chome} | {koaza} | {yomigana} | {english} | {machiaza_id} | {rsdt_addr_flg} | {wake_num_flg} |\n\n"
+                "# 具体的な内容\n"
+                "（ここに具体的な内容を記入してください。）\n"
+            )
+            labels_raw = f"データ指摘"
 
-        # URL-encode parameters for safe inclusion in GitHub issue URL
-        issue_title = urllib.parse.quote(issue_title_raw, safe='')
-        issue_body = urllib.parse.quote(issue_body_raw, safe='')
-        labels = urllib.parse.quote(labels_raw, safe='')
+            # URL-encode parameters for safe inclusion in GitHub issue URL
+            issue_title = urllib.parse.quote(issue_title_raw, safe='')
+            issue_body = urllib.parse.quote(issue_body_raw, safe='')
+            labels = urllib.parse.quote(labels_raw, safe='')
 
-        # Generate GitHub issue creation link with pre-filled title, body, and labels
-        issue_link = (
-            f"[📝](https://github.com/{ORGANIZATION}/{REPOSITORY}/issues/new?"
-            f"title={issue_title}"
-            f"&body={issue_body}"
-            f"&labels={labels})"
-        )
+            # Generate GitHub issue creation link with pre-filled title, body, and labels
+            issue_link = (
+                f"[📝](https://github.com/{ORGANIZATION}/{REPOSITORY}/issues/new?"
+                f"title={issue_title}"
+                f"&body={issue_body}"
+                f"&labels={labels})"
+            )
 
-        line = '| ' + ' | '.join([
-            oaza, chome, koaza, yomigana, english,
-            machiaza_id, rsdt_addr_flg, wake_num_flg, issue_link
-        ]) + ' |'
+            line = '| ' + ' | '.join([
+                oaza, chome, koaza, yomigana, english,
+                machiaza_id, rsdt_addr_flg, wake_num_flg, issue_link
+            ]) + ' |'
+        else:
+            line = '| ' + ' | '.join([
+                oaza, chome, koaza, yomigana, english,
+                machiaza_id, rsdt_addr_flg, wake_num_flg
+            ]) + ' |'
+
         lines.append(line)
 
     # --- Footer notes ---
