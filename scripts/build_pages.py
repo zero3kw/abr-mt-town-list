@@ -4,6 +4,7 @@
 import os
 import glob
 import pandas as pd
+import urllib.parse
 
 # --- Configuration ---
 ORGANIZATION = "zero3kw"
@@ -63,26 +64,29 @@ for lg, grp in all_df.groupby('lg_code'):
         rsdt_addr_flg = row['rsdt_addr_flg']
         wake_num_flg = row['wake_num_flg']
 
-        issue_title = (
-            f"【データ指摘】{title_text} {oaza} {chome} {koaza} {yomigana} {english} ({machiaza_id})"
+        issue_title_raw = f"【データ指摘】{title_text} {oaza} {chome} {koaza} {yomigana} {english} ({machiaza_id})"
+        issue_body_raw = (
+            "以下の項目について誤りがあればチェックしてください。\n\n"
+            "- [ ] 大字・町名\n"
+            "- [ ] 丁目名\n"
+            "- [ ] 小字名\n"
+            "- [ ] ヨミガナ\n"
+            "- [ ] 英字\n"
+            "- [ ] 町字ID\n"
+            "- [ ] 住居表示フラグ\n"
+            "- [ ] 起番フラグ\n\n"
+            "# 指摘時のデータ\n"
+            f"| 大字・町名 | 丁目名 | 小字名 | ヨミガナ | 英字 | 町字ID | 住居表示フラグ | 起番フラグ |\n"
+            f"| {oaza} | {chome} | {koaza} | {yomigana} | {english} | {machiaza_id} | {rsdt_addr_flg} | {wake_num_flg} |\n\n"
+            "# 具体的な内容\n"
+            "具体的な内容を記入してください。\n"
         )
-        issue_body = (
-            "以下の項目について誤りがあればチェックしてください。%0A%0A"
-            "- [ ] 大字・町名%0A"
-            "- [ ] 丁目名%0A"
-            "- [ ] 小字名%0A"
-            "- [ ] ヨミガナ%0A"
-            "- [ ] 英字%0A"
-            "- [ ] 町字ID%0A"
-            "- [ ] 住居表示フラグ%0A"
-            "- [ ] 起番フラグ%0A%0A"
-            "# 指摘時のデータ%0A"
-            f"| 大字・町名 | 丁目名 | 小字名 | ヨミガナ | 英字 | 町字ID | 住居表示フラグ | 起番フラグ |%0A"
-            f"| {oaza} | {chome} | {koaza} | {yomigana} | {english} | {machiaza_id} | {rsdt_addr_flg} | {wake_num_flg} |%0A%0A"
-            "# 具体的な内容%0A"
-             "具体的な内容を記入してください。%0A%0A"
-        )
-        labels = f"データ指摘,{pref}{city}{ward}{oaza}{chome}{koaza}"
+        labels_raw = f"データ指摘,{pref}{city}{ward}{oaza}{chome}{koaza}"
+
+        issue_title = urllib.parse.quote(issue_title_raw, safe='')
+        issue_body = urllib.parse.quote(issue_body_raw, safe='')
+        labels = urllib.parse.quote(labels_raw, safe='')
+
         issue_link = (
             f"[📝](https://github.com/{ORGANIZATION}/{REPOSITORY}/issues/new?"
             f"title={issue_title}"
