@@ -61,7 +61,7 @@ for idx in range(1, 48):
 
     subdir = os.path.join(DATA_DIR, prefix)
     if os.path.isdir(subdir):
-        md_files = sorted(glob.glob(os.path.join(subdir, '*.html')))
+        md_files = sorted(glob.glob(os.path.join(subdir, '*.md')))
         for md_path in md_files:
             title = ''
             # Read first heading line
