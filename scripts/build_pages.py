@@ -72,7 +72,7 @@ for lg, grp in all_df.groupby('lg_code'):
 
         if ENABLE_DATA_ISSUE_LINK:
             # Construct issue title and body for GitHub issue creation link
-            issue_title_raw = f"{title_text}{oaza}{chome}{koaza}({machiaza_id})"
+            issue_title_raw = f"{pref}{city}{ward}（{lg}）{oaza}{chome}{koaza}（{machiaza_id}）"
             issue_body_raw = (
                 "# 指摘項目\n\n"
                 "- [ ] 大字・町\n"
