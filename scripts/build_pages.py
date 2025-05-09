@@ -13,14 +13,15 @@ ENABLE_DATA_ISSUE_LINK = True
 
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SRC_DIR = os.path.join(ROOT_DIR, 'data')
-PAGE_ROOT = os.path.join(ROOT_DIR, 'docs', 'data')  # Output directory for generated pages
+PAGE_ROOT = os.path.join(ROOT_DIR, 'docs', 'data')
 
 # Ensure output directory exists
 os.makedirs(PAGE_ROOT, exist_ok=True)
 
 # --- Load and concatenate CSV files ---
 df_list = []
-for csv_path in glob.glob(os.path.join(SRC_DIR, 'mt_town_pref*.csv')):
+for csv_path in glob.glob(os.path.join(SRC_DIR, 'mt_town_fullset_pref*.csv')):
+# for csv_path in glob.glob(os.path.join(SRC_DIR, 'mt_town_fullset_pref47.csv')):
     df = pd.read_csv(csv_path, dtype=str, na_filter=False)
     df_list.append(df)
 all_df = pd.concat(df_list, ignore_index=True)
@@ -40,8 +41,8 @@ for lg, grp in all_df.groupby('lg_code'):
     ward = grp['ward'].iloc[0] if 'ward' in grp.columns else ''
     title_text = f"{pref}{city}{ward}（{lg}）"
 
-    header_line = '| 大字・町 | 丁目 | 小字 | ヨミガナ | 英字 | 町字ID | 住居表示フラグ | 起番フラグ |'
-    header_sep_line = '|:---|:---|:---|:---|:---|:---|:---|:---|'
+    header_line = '| 大字・町 | 丁目 | 小字 | ヨミガナ | 英字 | 町字ID | 住居表示フラグ | 起番フラグ | 同一町字識別情報 |'
+    header_sep_line = '|:---|:---|:---|:---|:---|:---|:---|:---|:---|'
 
     if ENABLE_DATA_ISSUE_LINK:
         header_line += ' データ指摘 |'
@@ -64,6 +65,7 @@ for lg, grp in all_df.groupby('lg_code'):
         oaza = row['oaza_cho']
         chome = row['chome']
         koaza = row['koaza']
+        machiaza_dist = row['machiaza_dist']
         yomigana = f"{row['oaza_cho_kana']} {row['chome_kana']} {row['koaza_kana']}"
         english = f"{row['oaza_cho_roma']}{row['chome_number']}{row['koaza_roma']}"
         machiaza_id = row['machiaza_id']
@@ -107,12 +109,12 @@ for lg, grp in all_df.groupby('lg_code'):
 
             line = '| ' + ' | '.join([
                 oaza, chome, koaza, yomigana, english,
-                machiaza_id, rsdt_addr_flg, wake_num_flg, issue_link
+                machiaza_id, rsdt_addr_flg, wake_num_flg, machiaza_dist, issue_link
             ]) + ' |'
         else:
             line = '| ' + ' | '.join([
                 oaza, chome, koaza, yomigana, english,
-                machiaza_id, rsdt_addr_flg, wake_num_flg
+                machiaza_id, rsdt_addr_flg, wake_num_flg, machiaza_dist
             ]) + ' |'
 
         lines.append(line)
